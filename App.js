@@ -1,44 +1,41 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import ContactList from './src/components/ContactList'
-import { useState, useEffect } from 'react'
+import { StyleSheet, Text, View, TouchableOpacity, Button } from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import Home from './src/Home'
+import DeatailUser from './src/DetailUser'
+import EditUser from './src/EditUser'
+import CreateUser from './src/CreateUser'
+
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [data, setData] = useState([]); // Initialize state variable with an empty array
-  function getRandomUserData() {
-    fetch('https://randomuser.me/api/?results=50')
-      .then((res) => res.json())
-      .then(data => {
-        setData(data); // Update the state with the fetched data
-      });
-  }
-
-  useEffect(() => {
-    getRandomUserData()
-  }, [])
+  
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.btnGetRandom} onPress={() => getRandomUserData()}>
-          <Text>Calcular</Text>
-      </TouchableOpacity>
-      <ContactList data={data}/>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{title: 'Lista de Contato'}}
+        />
+        <Stack.Screen 
+          name="DetailUser" 
+          component={DeatailUser} 
+          options={{title: 'Detalhes do Contato'}}/>
+        <Stack.Screen 
+          name="EditUser" 
+          component={EditUser}
+          options={{title: 'Alterar Contato'}}/>
+        <Stack.Screen 
+          name="CreateUser" 
+          component={CreateUser}
+          options={{title: 'Adicionar Contato'}}/>
+      </Stack.Navigator>
       <StatusBar style="auto" />
-    </View>
+    </NavigationContainer>
+    
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  btnGetRandom: {
-    marginTop: 100,
-    padding: 10,
-    backgroundColor:'#aaa'
-    
-  }
-});
